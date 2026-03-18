@@ -5,14 +5,14 @@
     "tagline": "Capture The Flag Competition",
     "edition": "2025 Edition",
     "instructor_key": "sbs_admin_2025",
-    "welcome_message": "Welcome to SecureByte Society CTF — find the flags, sharpen your skills, and climb the leaderboard."
+    "welcome_message": "Welcome to SecureByte Society CTF \u2014 find the flags, sharpen your skills, and climb the leaderboard."
   },
   "challenges": [
     {
       "id": "c1",
       "title": "Decode the Message",
       "category": "crypto",
-      "icon": "🔐",
+      "icon": "\ud83d\udd10",
       "difficulty": "easy",
       "points": 100,
       "author": "SBS Team",
@@ -25,14 +25,14 @@
         "Python"
       ],
       "steps": [
-        "Open challenge1.txt — notice the base64-looking text",
+        "Open challenge1.txt \u2014 notice the base64-looking text",
         "Run:  base64 -d challenge1.txt",
         "The output is still base64! Decode it a second time.",
-        "Or use CyberChef → From Base64 (apply twice)",
+        "Or use CyberChef \u2192 From Base64 (apply twice)",
         "Python:  import base64; print(base64.b64decode(base64.b64decode(open('challenge1.txt').read())))"
       ],
       "hints": [
-        "The = signs at the end are Base64 padding — it has been encoded more than once.",
+        "The = signs at the end are Base64 padding \u2014 it has been encoded more than once.",
         "Try decoding twice:  base64 -d challenge1.txt | base64 -d",
         "The flag format is: flag{...}"
       ],
@@ -43,11 +43,11 @@
       "id": "c7",
       "title": "Caesar's Secret",
       "category": "crypto",
-      "icon": "🏛",
+      "icon": "\ud83c\udfdb",
       "difficulty": "easy",
       "points": 100,
       "author": "SBS Team",
-      "description": "Julius Caesar used a simple cipher to protect his messages — shift every letter by a fixed number. A message has been intercepted. Shift it back to read the secret.",
+      "description": "Julius Caesar used a simple cipher to protect his messages \u2014 shift every letter by a fixed number. A message has been intercepted. Shift it back to read the secret.",
       "file": "caesar.txt",
       "image": null,
       "tools": [
@@ -58,14 +58,14 @@
       "steps": [
         "Download and open caesar.txt",
         "Notice the text looks like English but every letter is shifted",
-        "Try CyberChef → ROT13 → adjust the Amount to 3",
+        "Try CyberChef \u2192 ROT13 \u2192 adjust the Amount to 3",
         "Or Python: ''.join(chr((ord(c)-ord('a')-3)%26+ord('a')) if c.islower() else c for c in text)",
-        "Caesar cipher uses a shift of 3 — A becomes D, B becomes E, etc."
+        "Caesar cipher uses a shift of 3 \u2014 A becomes D, B becomes E, etc."
       ],
       "hints": [
-        "Julius Caesar always used a shift of 3 — A becomes D, B becomes E, etc.",
+        "Julius Caesar always used a shift of 3 \u2014 A becomes D, B becomes E, etc.",
         "In CyberChef use 'ROT13' with Amount=3, or try 'Caesar Box Cipher'.",
-        "The flag is inside the decoded message — look for flag{...}"
+        "The flag is inside the decoded message \u2014 look for flag{...}"
       ],
       "flag": "flag{caesar_cipher_broken}",
       "visible": true
@@ -74,11 +74,11 @@
       "id": "c8",
       "title": "ROT13 Riddle",
       "category": "crypto",
-      "icon": "🔄",
+      "icon": "\ud83d\udd04",
       "difficulty": "easy",
       "points": 100,
       "author": "SBS Team",
-      "description": "ROT13 is a special Caesar cipher that rotates letters by 13 positions. It is its own inverse — applying it twice gives you back the original. Decode this intercepted message.",
+      "description": "ROT13 is a special Caesar cipher that rotates letters by 13 positions. It is its own inverse \u2014 applying it twice gives you back the original. Decode this intercepted message.",
       "file": "rot13.txt",
       "image": null,
       "tools": [
@@ -89,13 +89,13 @@
       "steps": [
         "Download rot13.txt and read its contents",
         "Apply ROT13: in Linux terminal run:  cat rot13.txt | tr 'A-Za-z' 'N-ZA-Mn-za-m'",
-        "Or CyberChef → ROT13 (default settings)",
+        "Or CyberChef \u2192 ROT13 (default settings)",
         "Or Python:  import codecs; codecs.decode(open('rot13.txt').read(), 'rot_13')"
       ],
       "hints": [
-        "ROT13 means rotate letters by 13 — A becomes N, B becomes O, etc.",
+        "ROT13 means rotate letters by 13 \u2014 A becomes N, B becomes O, etc.",
         "Linux one-liner:  cat rot13.txt | tr 'A-Za-z' 'N-ZA-Mn-za-m'",
-        "The decoded message contains the flag — look for flag{...}"
+        "The decoded message contains the flag \u2014 look for flag{...}"
       ],
       "flag": "flag{r0t13_1s_not_s3cur3}",
       "visible": true
@@ -104,11 +104,11 @@
       "id": "c9",
       "title": "Hex Decoder",
       "category": "crypto",
-      "icon": "🔢",
+      "icon": "\ud83d\udd22",
       "difficulty": "medium",
       "points": 150,
       "author": "SBS Team",
-      "description": "Data can be represented in hexadecimal — base 16 using digits 0-9 and letters A-F. A secret has been encoded as a stream of hex bytes. Convert it back to text to find the flag.",
+      "description": "Data can be represented in hexadecimal \u2014 base 16 using digits 0-9 and letters A-F. A secret has been encoded as a stream of hex bytes. Convert it back to text to find the flag.",
       "file": "hexfile.txt",
       "image": null,
       "tools": [
@@ -117,14 +117,14 @@
         "xxd"
       ],
       "steps": [
-        "Open hexfile.txt — you will see a long string of 0-9 and a-f characters",
+        "Open hexfile.txt \u2014 you will see a long string of 0-9 and a-f characters",
         "Each pair of hex characters is one ASCII character",
         "Python:  bytes.fromhex(open('hexfile.txt').read().strip()).decode()",
-        "Or CyberChef → From Hex",
+        "Or CyberChef \u2192 From Hex",
         "Or terminal:  echo '666c61677b...' | xxd -r -p"
       ],
       "hints": [
-        "Hexadecimal is base 16 — each byte is two hex digits: 66=f, 6c=l, 61=a, 67=g",
+        "Hexadecimal is base 16 \u2014 each byte is two hex digits: 66=f, 6c=l, 61=a, 67=g",
         "Try: python3 -c \"print(bytes.fromhex(open('hexfile.txt').read().strip()).decode())\"",
         "The first 8 hex characters 666c6167 spell out 'flag'"
       ],
@@ -135,11 +135,11 @@
       "id": "c10",
       "title": "XOR Breaker",
       "category": "crypto",
-      "icon": "⊕",
+      "icon": "\u2295",
       "difficulty": "hard",
       "points": 300,
       "author": "SBS Team",
-      "description": "XOR encryption XORs each byte of the plaintext with a key. Luckily, XOR is its own inverse — XOR the ciphertext with the same key to get back the plaintext. The key is given. Decrypt it.",
+      "description": "XOR encryption XORs each byte of the plaintext with a key. Luckily, XOR is its own inverse \u2014 XOR the ciphertext with the same key to get back the plaintext. The key is given. Decrypt it.",
       "file": "xor_cipher.txt",
       "image": null,
       "tools": [
@@ -147,10 +147,10 @@
         "CyberChef"
       ],
       "steps": [
-        "Open xor_cipher.txt — note the key (0x42) and the hex ciphertext",
+        "Open xor_cipher.txt \u2014 note the key (0x42) and the hex ciphertext",
         "XOR every byte of the ciphertext with 0x42",
         "Python: cipher=bytes.fromhex('PASTE_HEX'); print(bytes([b^0x42 for b in cipher]).decode())",
-        "Or CyberChef → From Hex → XOR (key: 42, scheme: Hex)"
+        "Or CyberChef \u2192 From Hex \u2192 XOR (key: 42, scheme: Hex)"
       ],
       "hints": [
         "XOR is its own inverse: if A XOR B = C, then C XOR B = A",
@@ -164,11 +164,11 @@
       "id": "c2",
       "title": "Fake Image",
       "category": "forensics",
-      "icon": "🖼",
+      "icon": "\ud83d\uddbc",
       "difficulty": "easy",
       "points": 150,
       "author": "SBS Team",
-      "description": "Someone sent a file called image.jpg — but something is very wrong. The file is lying about what it really is. Find out what is hiding inside.",
+      "description": "Someone sent a file called image.jpg \u2014 but something is very wrong. The file is lying about what it really is. Find out what is hiding inside.",
       "file": "image.jpg",
       "image": null,
       "tools": [
@@ -177,13 +177,13 @@
         "unzip"
       ],
       "steps": [
-        "Run:  file image.jpg — notice it says 'Zip archive data', not JPEG!",
-        "Run:  binwalk image.jpg — spot the embedded ZIP signature",
+        "Run:  file image.jpg \u2014 notice it says 'Zip archive data', not JPEG!",
+        "Run:  binwalk image.jpg \u2014 spot the embedded ZIP signature",
         "Rename:  mv image.jpg image.zip",
-        "Extract:  unzip image.zip — read flag.txt inside"
+        "Extract:  unzip image.zip \u2014 read flag.txt inside"
       ],
       "hints": [
-        "A file extension is just a label — the real type is stored in the first bytes (magic bytes).",
+        "A file extension is just a label \u2014 the real type is stored in the first bytes (magic bytes).",
         "binwalk scans for known file headers. Look for a ZIP offset at position 0x00.",
         "ZIP magic bytes are: PK.. (50 4B 03 04)"
       ],
@@ -194,11 +194,11 @@
       "id": "c3",
       "title": "Metadata Hunt",
       "category": "forensics",
-      "icon": "📷",
+      "icon": "\ud83d\udcf7",
       "difficulty": "medium",
       "points": 200,
       "author": "SBS Team",
-      "description": "A photo was shared online. The person thought they were anonymous — but photos carry invisible metadata that can expose secrets. Hunt down the hidden flag.",
+      "description": "A photo was shared online. The person thought they were anonymous \u2014 but photos carry invisible metadata that can expose secrets. Hunt down the hidden flag.",
       "file": "photo.jpg",
       "image": null,
       "tools": [
@@ -207,15 +207,15 @@
         "hex editor"
       ],
       "steps": [
-        "Run:  exiftool photo.jpg — read all metadata fields carefully",
+        "Run:  exiftool photo.jpg \u2014 read all metadata fields carefully",
         "Look for the Author and Flag fields in the output",
         "Or:  strings photo.jpg | grep flag",
-        "Or:  cat photo.jpg — this file is plain text disguised as a JPG!"
+        "Or:  cat photo.jpg \u2014 this file is plain text disguised as a JPG!"
       ],
       "hints": [
         "EXIF metadata is embedded in image files and can store camera model, GPS, author, comments...",
         "Try:  strings photo.jpg",
-        "This file is actually plain text — try opening it in a text editor directly!"
+        "This file is actually plain text \u2014 try opening it in a text editor directly!"
       ],
       "flag": "flag{metadata_leak}",
       "visible": true
@@ -224,11 +224,11 @@
       "id": "c11",
       "title": "Whitespace Stego",
       "category": "forensics",
-      "icon": "👁",
+      "icon": "\ud83d\udc41",
       "difficulty": "hard",
       "points": 350,
       "author": "SBS Team",
-      "description": "Steganography is hiding information inside innocent-looking files. This text file looks completely normal — but a secret is hidden in the invisible whitespace characters. Can you extract it?",
+      "description": "Steganography is hiding information inside innocent-looking files. This text file looks completely normal \u2014 but a secret is hidden in the invisible whitespace characters. Can you extract it?",
       "file": "whitespace.txt",
       "image": null,
       "tools": [
@@ -237,13 +237,13 @@
         "stegsnow"
       ],
       "steps": [
-        "Open whitespace.txt — it looks like a normal text file",
-        "Run:  cat -A whitespace.txt — look for ^ (spaces) and I (tabs) at the end",
+        "Open whitespace.txt \u2014 it looks like a normal text file",
+        "Run:  cat -A whitespace.txt \u2014 look for ^ (spaces) and I (tabs) at the end",
         "The flag is encoded in trailing whitespace: space=0, tab=1 (binary)",
         "Python snippet: line=[l for l in open('whitespace.txt').readlines() if set(l.strip())<=set(' \\t')][0]; bits=''.join('1' if c=='\\t' else '0' for c in line); print(''.join(chr(int(bits[i:i+8],2)) for i in range(0,len(bits),8)))"
       ],
       "hints": [
-        "The hidden data is entirely invisible — it uses only spaces and tabs which look identical in a text editor.",
+        "The hidden data is entirely invisible \u2014 it uses only spaces and tabs which look identical in a text editor.",
         "Run: cat -A whitespace.txt and look for a line made entirely of ^ (space) and I (tab) characters.",
         "Decode rule: space=0, tab=1, groups of 8 bits = one ASCII character"
       ],
@@ -254,7 +254,7 @@
       "id": "c4",
       "title": "Hidden Strings",
       "category": "binary",
-      "icon": "💾",
+      "icon": "\ud83d\udcbe",
       "difficulty": "medium",
       "points": 200,
       "author": "SBS Team",
@@ -267,9 +267,9 @@
         "hexdump"
       ],
       "steps": [
-        "Run:  strings mystery.bin — extract all printable text sequences",
-        "Run:  strings mystery.bin | grep flag — filter for the flag",
-        "Or:  xxd mystery.bin | less — look through the hex dump",
+        "Run:  strings mystery.bin \u2014 extract all printable text sequences",
+        "Run:  strings mystery.bin | grep flag \u2014 filter for the flag",
+        "Or:  xxd mystery.bin | less \u2014 look through the hex dump",
         "Or:  cat mystery.bin | tr -cd '[:print:]' | grep -o 'flag{[^}]*}'"
       ],
       "hints": [
@@ -284,11 +284,11 @@
       "id": "c14",
       "title": "CrackMe",
       "category": "binary",
-      "icon": "🔓",
+      "icon": "\ud83d\udd13",
       "difficulty": "hard",
       "points": 350,
       "author": "SBS Team",
-      "description": "A program has been found on a suspicious server. It checks for a password before revealing a reward. You cannot run it — but you do not need to. The password and the flag are embedded inside the binary itself.",
+      "description": "A program has been found on a suspicious server. It checks for a password before revealing a reward. You cannot run it \u2014 but you do not need to. The password and the flag are embedded inside the binary itself.",
       "file": "crackme.bin",
       "image": null,
       "tools": [
@@ -297,14 +297,14 @@
         "Ghidra (optional)"
       ],
       "steps": [
-        "Run:  strings crackme.bin — look through all embedded text",
+        "Run:  strings crackme.bin \u2014 look through all embedded text",
         "Find the usage message, error message, and success message",
         "The flag is printed when the correct password is entered",
-        "Also look for the password itself — it is stored as a plain string",
+        "Also look for the password itself \u2014 it is stored as a plain string",
         "Run:  strings crackme.bin | grep -E 'flag|pass|correct|reward'"
       ],
       "hints": [
-        "Real-world crackme challenges require reverse engineering — but this one stores everything in plaintext.",
+        "Real-world crackme challenges require reverse engineering \u2014 but this one stores everything in plaintext.",
         "Run: strings crackme.bin and read every line carefully.",
         "Look for a string that looks like a password near the success message."
       ],
@@ -315,11 +315,11 @@
       "id": "c5",
       "title": "Client-Side Secrets",
       "category": "web",
-      "icon": "🌐",
+      "icon": "\ud83c\udf10",
       "difficulty": "easy",
       "points": 100,
       "author": "SBS Team",
-      "description": "Open zzz.html in your browser. The developer made a classic mistake — they stored a secret inside the JavaScript code. Find it using your browser's DevTools.",
+      "description": "Open zzz.html in your browser. The developer made a classic mistake \u2014 they stored a secret inside the JavaScript code. Find it using your browser's DevTools.",
       "file": "zzz.html",
       "image": null,
       "tools": [
@@ -331,11 +331,11 @@
         "Press Ctrl+Shift+I (or Cmd+Opt+I on Mac) to open DevTools",
         "Go to the Sources tab and open zzz.html",
         "Search for 'FLAG{' using Ctrl+F inside the source viewer",
-        "OR: Go to the Console tab, enter any login, click Login — watch for debug output"
+        "OR: Go to the Console tab, enter any login, click Login \u2014 watch for debug output"
       ],
       "hints": [
         "Look for a variable named FLAG or const FLAG in the <script> section.",
-        "The developer left DEBUG_MODE = true — secrets get logged to the browser console.",
+        "The developer left DEBUG_MODE = true \u2014 secrets get logged to the browser console.",
         "Open Console tab, type anything in the login form, click Login. Read what appears."
       ],
       "flag": "FLAG{cl13nt_s1d3_1s_n3v3r_s3cur3}",
@@ -345,11 +345,11 @@
       "id": "c6",
       "title": "Encoded Login",
       "category": "web",
-      "icon": "🔑",
+      "icon": "\ud83d\udd11",
       "difficulty": "medium",
       "points": 250,
       "author": "SBS Team",
-      "description": "Open zzzzchallenge.html — there is an admin login page. The credentials are hidden using Base64 encoding. Decode them, log in, and capture the flag.",
+      "description": "Open zzzzchallenge.html \u2014 there is an admin login page. The credentials are hidden using Base64 encoding. Decode them, log in, and capture the flag.",
       "file": "zzzzchallenge.html",
       "image": null,
       "tools": [
@@ -359,7 +359,7 @@
       ],
       "steps": [
         "Download and open zzzzchallenge.html in your browser",
-        "Open DevTools → Sources — find const encodedUser and const encodedPass",
+        "Open DevTools \u2192 Sources \u2014 find const encodedUser and const encodedPass",
         "Open the Console tab and run:  atob('YWRtaW4=')",
         "Run:  atob('cGFzc3dvcmQxMjM=')  to get the password",
         "Log in with the decoded credentials to reveal the flag"
@@ -367,7 +367,7 @@
       "hints": [
         "atob() is a browser built-in function that decodes Base64 strings.",
         "Open the Console tab and type:  atob('YWRtaW4=')  then press Enter.",
-        "Username: admin  |  Password: password123 — now log in to get the flag!"
+        "Username: admin  |  Password: password123 \u2014 now log in to get the flag!"
       ],
       "flag": "FLAG{l0g1n_cr4ck3d}",
       "visible": true
@@ -376,11 +376,11 @@
       "id": "c12",
       "title": "SQL Injection",
       "category": "web",
-      "icon": "💉",
+      "icon": "\ud83d\udc89",
       "difficulty": "medium",
       "points": 250,
       "author": "SBS Team",
-      "description": "A staff login portal has been found. The developer forgot to sanitize the username input — which means you can inject SQL commands directly into the login query. Bypass the login without knowing the password.",
+      "description": "A staff login portal has been found. The developer forgot to sanitize the username input \u2014 which means you can inject SQL commands directly into the login query. Bypass the login without knowing the password.",
       "file": "login_sqli.html",
       "image": null,
       "tools": [
@@ -397,7 +397,7 @@
       "hints": [
         "SQL injection uses special characters to break out of the intended query structure.",
         "The single quote ' ends the username string. Everything after becomes SQL code.",
-        "Try the username:  ' OR '1'='1  — this makes the WHERE clause always true."
+        "Try the username:  ' OR '1'='1  \u2014 this makes the WHERE clause always true."
       ],
       "flag": "FLAG{sql_1nj3ct10n_byp4ss}",
       "visible": true
@@ -406,11 +406,11 @@
       "id": "c13",
       "title": "Cookie Monster",
       "category": "web",
-      "icon": "🍪",
+      "icon": "\ud83c\udf6a",
       "difficulty": "medium",
       "points": 200,
       "author": "SBS Team",
-      "description": "A VIP members area controls access using a browser cookie. Guest users cannot see the flag. But cookies are just text stored in your browser — and you can edit them. Can you upgrade your own access?",
+      "description": "A VIP members area controls access using a browser cookie. Guest users cannot see the flag. But cookies are just text stored in your browser \u2014 and you can edit them. Can you upgrade your own access?",
       "file": "cookie_auth.html",
       "image": null,
       "tools": [
@@ -419,13 +419,13 @@
       ],
       "steps": [
         "Download and open cookie_auth.html in your browser",
-        "Click 'Check My Access' — you will see you are set as a guest",
-        "Open DevTools → Application tab → Cookies (left sidebar)",
+        "Click 'Check My Access' \u2014 you will see you are set as a guest",
+        "Open DevTools \u2192 Application tab \u2192 Cookies (left sidebar)",
         "Find the cookie named 'role' and double-click its value",
         "Change the value from 'guest' to 'vip' and press Enter, then refresh"
       ],
       "hints": [
-        "Browser cookies are visible and editable in DevTools → Application → Cookies.",
+        "Browser cookies are visible and editable in DevTools \u2192 Application \u2192 Cookies.",
         "Find the 'role' cookie and change its value to something with higher privileges.",
         "Try changing role to: vip"
       ],
@@ -436,7 +436,7 @@
       "id": "c15",
       "title": "Packet Secrets",
       "category": "misc",
-      "icon": "📡",
+      "icon": "\ud83d\udce1",
       "difficulty": "medium",
       "points": 200,
       "author": "SBS Team",
@@ -450,13 +450,13 @@
       ],
       "steps": [
         "Open capture.log and read through the captured network frames",
-        "Look at Frame 5 — notice the Authorization: Bearer token",
+        "Look at Frame 5 \u2014 notice the Authorization: Bearer token",
         "A JWT has three base64-encoded parts separated by dots",
         "Decode the second part (the payload) using base64",
         "Python:  import base64; base64.b64decode('SECOND_PART' + '==').decode()"
       ],
       "hints": [
-        "A JWT token has the format: header.payload.signature — decode the middle part.",
+        "A JWT token has the format: header.payload.signature \u2014 decode the middle part.",
         "The payload is base64 encoded. Add == padding if needed before decoding.",
         "Python: import base64, json; print(json.loads(base64.b64decode('PAYLOAD==')))"
       ],
@@ -467,11 +467,11 @@
       "id": "c16",
       "title": "Morse Mayhem",
       "category": "misc",
-      "icon": "📻",
+      "icon": "\ud83d\udcfb",
       "difficulty": "easy",
       "points": 100,
       "author": "SBS Team",
-      "description": "A distress signal was intercepted from a compromised radio station. The message is in Morse code — dots and dashes that map to letters and numbers. Decode the transmission to find the flag.",
+      "description": "A distress signal was intercepted from a compromised radio station. The message is in Morse code \u2014 dots and dashes that map to letters and numbers. Decode the transmission to find the flag.",
       "file": "morse.txt",
       "image": null,
       "tools": [
@@ -482,16 +482,217 @@
       "steps": [
         "Open morse.txt and read the Morse code pattern",
         "Each letter is separated by a space, each word by ' / '",
-        "Use CyberChef → From Morse Code",
+        "Use CyberChef \u2192 From Morse Code",
         "Or visit: https://morsecode.world/international/translator.html",
-        "Or dcode.fr → Morse Code — paste the message and decode"
+        "Or dcode.fr \u2192 Morse Code \u2014 paste the message and decode"
       ],
       "hints": [
-        "Use an online Morse decoder — CyberChef has a built-in 'From Morse Code' operation.",
-        "The flag starts with FLAG{ — once decoded it will be clear!",
+        "Use an online Morse decoder \u2014 CyberChef has a built-in 'From Morse Code' operation.",
+        "The flag starts with FLAG{ \u2014 once decoded it will be clear!",
         ". = dot (short), - = dash (long). Letters are separated by spaces, words by /"
       ],
       "flag": "FLAG{MORSE_C0DE_CR4CKED}",
+      "visible": true
+    },
+    {
+      "id": "c17",
+      "title": "Vigenere Vault",
+      "category": "crypto",
+      "icon": "\ud83d\udddd",
+      "difficulty": "hard",
+      "points": 350,
+      "author": "SBS Team",
+      "description": "The Vigenere cipher uses a keyword to shift letters by different amounts, making it much harder to crack than Caesar. A message has been intercepted. The key length is 5 letters and is a common cybersecurity word.",
+      "file": "vigenere.txt",
+      "image": null,
+      "tools": [
+        "CyberChef",
+        "dcode.fr",
+        "Python",
+        "quipqiup.com"
+      ],
+      "steps": [
+        "Download vigenere.txt and read the ciphertext",
+        "The cipher uses a repeating keyword to shift each letter",
+        "Method 1 \u2014 CyberChef: paste text \u2192 add 'Vigenere Decode' \u2192 try key: CYBER",
+        "Method 2 \u2014 dcode.fr/vigenere-cipher \u2192 paste ciphertext \u2192 try key CYBER",
+        "Method 3 \u2014 Python: write a decrypt function with key='CYBER'",
+        "The decrypted message contains the flag inside flag{...}"
+      ],
+      "hints": [
+        "The key is 5 letters long \u2014 the file tells you this.",
+        "The key is a well-known cybersecurity word. Think about what field we are in.",
+        "Key: CYBER \u2014 try it in CyberChef \u2192 Vigenere Decode"
+      ],
+      "flag": "flag{v1g3n3r3_c1ph3r_cr4ck3d}",
+      "visible": true
+    },
+    {
+      "id": "c18",
+      "title": "Binary Basics",
+      "category": "crypto",
+      "icon": "01\ufe0f\u20e3",
+      "difficulty": "easy",
+      "points": 100,
+      "author": "SBS Team",
+      "description": "Computers store everything as binary \u2014 ones and zeros. Each group of 8 bits is one byte, which maps to one ASCII character. Convert the binary stream back to text to reveal the flag.",
+      "file": "binary.txt",
+      "image": null,
+      "tools": [
+        "CyberChef",
+        "Python",
+        "RapidTables"
+      ],
+      "steps": [
+        "Download binary.txt \u2014 you will see groups of 8 digits (0s and 1s)",
+        "Each 8-digit group is one ASCII character in binary",
+        "Method 1 \u2014 CyberChef: paste the binary \u2192 add 'From Binary' recipe",
+        "Method 2 \u2014 Python: bits='01100110 01101100 ...'; print(''.join(chr(int(b,2)) for b in bits.split()))",
+        "Method 3 \u2014 visit rapidtables.com/convert/number/binary-to-ascii.html",
+        "The converted text is the flag"
+      ],
+      "hints": [
+        "01100110 = 102 = 'f', 01101100 = 108 = 'l', 01100001 = 97 = 'a', 01100111 = 103 = 'g'",
+        "In CyberChef just use 'From Binary' \u2014 it handles spaces automatically",
+        "Python: ''.join(chr(int(b,2)) for b in open('binary.txt').read().split('\\n')[2].split())"
+      ],
+      "flag": "flag{b1n4ry_t0_4sc11}",
+      "visible": true
+    },
+    {
+      "id": "c19",
+      "title": "JWT Forgery",
+      "category": "web",
+      "icon": "\ud83c\udfab",
+      "difficulty": "hard",
+      "points": 400,
+      "author": "SBS Team",
+      "description": "You have been issued a guest JWT token. The server uses alg:none \u2014 meaning it does NOT verify the signature. Forge a new JWT with role=admin in the payload to get the flag.",
+      "file": "jwt_challenge.txt",
+      "image": null,
+      "tools": [
+        "jwt.io",
+        "Python",
+        "CyberChef",
+        "browser Console"
+      ],
+      "steps": [
+        "Download jwt_challenge.txt \u2014 read your guest token",
+        "A JWT is: base64url(header).base64url(payload).signature",
+        "Since alg is 'none', the signature is empty \u2014 just a trailing dot",
+        "Step 1: decode the payload (middle part) to understand its structure",
+        "Step 2: create a new payload with role changed from 'user' to 'admin'",
+        "Step 3: base64url-encode your new payload (no padding =)",
+        "Step 4: build the new token: original_header.new_payload.",
+        "Python: import base64,json; p=json.dumps({'user':'admin','role':'admin','flag':'?'}); token=header+'.'+base64.b64encode(p.encode()).rstrip(b'=').decode()+'.'",
+        "The admin token from the file already contains the flag in the payload \u2014 just decode it!"
+      ],
+      "hints": [
+        "The admin JWT token is already in jwt_challenge.txt \u2014 decode its payload!",
+        "Take the second part (between the two dots), add == and base64 decode it",
+        "Python: import base64; base64.b64decode('SECOND_PART==').decode()"
+      ],
+      "flag": "FLAG{jwt_4lg_n0n3_byp4ss}",
+      "visible": true
+    },
+    {
+      "id": "c20",
+      "title": "Hash Cracker",
+      "category": "crypto",
+      "icon": "#\ufe0f\u20e3",
+      "difficulty": "medium",
+      "points": 200,
+      "author": "SBS Team",
+      "description": "A database of password hashes has been leaked. The admin account uses an MD5 hash. MD5 is a one-way function but common passwords can be cracked using rainbow tables or wordlists. Crack it.",
+      "file": "hashes.txt",
+      "image": null,
+      "tools": [
+        "CrackStation",
+        "hashcat",
+        "john",
+        "Python"
+      ],
+      "steps": [
+        "Download hashes.txt \u2014 find the admin MD5 hash",
+        "Method 1 (easiest): visit crackstation.net \u2014 paste the MD5 hash and click Crack",
+        "Method 2 \u2014 Python brute force with common passwords:",
+        "  import hashlib",
+        "  wordlist=['password','123456','admin','letmein','qwerty','dragon','master','hello','welcome','sunshine']",
+        "  target='PASTE_ADMIN_HASH'",
+        "  for p in wordlist:",
+        "    if hashlib.md5(p.encode()).hexdigest()==target: print('Password found:',p)",
+        "The flag is: flag{the_cracked_password} where the_cracked_password is what you found"
+      ],
+      "hints": [
+        "MD5 hashes of common passwords are publicly available in rainbow tables.",
+        "Try crackstation.net \u2014 just paste the hash, it has billions of pre-cracked hashes.",
+        "The password is a common English word \u2014 it is in the top 100 most common passwords."
+      ],
+      "flag": "flag{sunshine}",
+      "visible": true
+    },
+    {
+      "id": "c21",
+      "title": "Path Traversal",
+      "category": "web",
+      "icon": "\ud83d\uddc2",
+      "difficulty": "hard",
+      "points": 400,
+      "author": "SBS Team",
+      "description": "A file viewer web app reads files from a fixed directory. But it does not validate the filename \u2014 meaning you can use ../ to escape the intended directory and read any file on the server, including /etc/passwd.",
+      "file": "traversal.html",
+      "image": null,
+      "tools": [
+        "Browser",
+        "Chrome DevTools"
+      ],
+      "steps": [
+        "Download and open traversal.html in your browser",
+        "The app reads files from /var/www/files/ \u2014 try typing report.txt",
+        "Now try: ../secret.txt \u2014 notice it goes up one directory!",
+        "Try: ../../etc/passwd \u2014 this goes up two levels and reads the system password file",
+        "Or try: /etc/passwd directly",
+        "Read the output carefully \u2014 the flag is hidden in one of the user entries"
+      ],
+      "hints": [
+        "../ means 'go up one directory'. ../../ goes up two levels.",
+        "Try ../../etc/passwd in the filename field",
+        "The flag is in the user entry for flag_user in the passwd output"
+      ],
+      "flag": "FLAG{d1r3ct0ry_tr4v3rs4l}",
+      "visible": true
+    },
+    {
+      "id": "c22",
+      "title": "LSB Stego",
+      "category": "forensics",
+      "icon": "\ud83d\udd0d",
+      "difficulty": "hard",
+      "points": 350,
+      "author": "SBS Team",
+      "description": "LSB (Least Significant Bit) steganography hides data by replacing the last bit of each pixel's colour value. The change is invisible to the human eye but extractable with the right tools. A report file shows you the extraction results.",
+      "file": "lsb_report.txt",
+      "image": null,
+      "tools": [
+        "zsteg",
+        "stegsolve",
+        "Python PIL",
+        "reading carefully"
+      ],
+      "steps": [
+        "Download lsb_report.txt",
+        "Read the tool output carefully \u2014 it shows what zsteg found",
+        "Look at the [b1,r,lsb,xy] line \u2014 this is the red channel LSB extraction",
+        "The flag is directly visible in the report output",
+        "In a real LSB challenge you would run: zsteg -a image.png",
+        "Or use Python: from PIL import Image; img=Image.open('img.png'); pixels=list(img.getdata()); bits=''.join(str(p[0]&1) for p in pixels)"
+      ],
+      "hints": [
+        "Read the report file carefully \u2014 the flag is printed in plain text in the output",
+        "Look at the [b1,r,lsb,xy] entry in the zsteg output",
+        "In real LSB stego, the flag is reconstructed from the least significant bits of each pixel"
+      ],
+      "flag": "flag{lsb_st3g0_m4st3r}",
       "visible": true
     }
   ]

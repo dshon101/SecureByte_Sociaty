@@ -500,6 +500,207 @@ const SBS_DATA = {
       ],
       "flag": "FLAG{MORSE_C0DE_CR4CKED}",
       "visible": true
+    },
+    {
+      "id": "c17",
+      "title": "Vigenere Vault",
+      "category": "crypto",
+      "icon": "🗝",
+      "difficulty": "hard",
+      "points": 350,
+      "author": "SBS Team",
+      "description": "The Vigenere cipher uses a keyword to shift letters by different amounts, making it much harder to crack than Caesar. A message has been intercepted. The key length is 5 letters and is a common cybersecurity word.",
+      "file": "vigenere.txt",
+      "image": null,
+      "tools": [
+        "CyberChef",
+        "dcode.fr",
+        "Python",
+        "quipqiup.com"
+      ],
+      "steps": [
+        "Download vigenere.txt and read the ciphertext",
+        "The cipher uses a repeating keyword to shift each letter",
+        "Method 1 — CyberChef: paste text → add 'Vigenere Decode' → try key: CYBER",
+        "Method 2 — dcode.fr/vigenere-cipher → paste ciphertext → try key CYBER",
+        "Method 3 — Python: write a decrypt function with key='CYBER'",
+        "The decrypted message contains the flag inside flag{...}"
+      ],
+      "hints": [
+        "The key is 5 letters long — the file tells you this.",
+        "The key is a well-known cybersecurity word. Think about what field we are in.",
+        "Key: CYBER — try it in CyberChef → Vigenere Decode"
+      ],
+      "flag": "flag{v1g3n3r3_c1ph3r_cr4ck3d}",
+      "visible": true
+    },
+    {
+      "id": "c18",
+      "title": "Binary Basics",
+      "category": "crypto",
+      "icon": "01️⃣",
+      "difficulty": "easy",
+      "points": 100,
+      "author": "SBS Team",
+      "description": "Computers store everything as binary — ones and zeros. Each group of 8 bits is one byte, which maps to one ASCII character. Convert the binary stream back to text to reveal the flag.",
+      "file": "binary.txt",
+      "image": null,
+      "tools": [
+        "CyberChef",
+        "Python",
+        "RapidTables"
+      ],
+      "steps": [
+        "Download binary.txt — you will see groups of 8 digits (0s and 1s)",
+        "Each 8-digit group is one ASCII character in binary",
+        "Method 1 — CyberChef: paste the binary → add 'From Binary' recipe",
+        "Method 2 — Python: bits='01100110 01101100 ...'; print(''.join(chr(int(b,2)) for b in bits.split()))",
+        "Method 3 — visit rapidtables.com/convert/number/binary-to-ascii.html",
+        "The converted text is the flag"
+      ],
+      "hints": [
+        "01100110 = 102 = 'f', 01101100 = 108 = 'l', 01100001 = 97 = 'a', 01100111 = 103 = 'g'",
+        "In CyberChef just use 'From Binary' — it handles spaces automatically",
+        "Python: ''.join(chr(int(b,2)) for b in open('binary.txt').read().split('\\n')[2].split())"
+      ],
+      "flag": "flag{b1n4ry_t0_4sc11}",
+      "visible": true
+    },
+    {
+      "id": "c19",
+      "title": "JWT Forgery",
+      "category": "web",
+      "icon": "🎫",
+      "difficulty": "hard",
+      "points": 400,
+      "author": "SBS Team",
+      "description": "You have been issued a guest JWT token. The server uses alg:none — meaning it does NOT verify the signature. Forge a new JWT with role=admin in the payload to get the flag.",
+      "file": "jwt_challenge.txt",
+      "image": null,
+      "tools": [
+        "jwt.io",
+        "Python",
+        "CyberChef",
+        "browser Console"
+      ],
+      "steps": [
+        "Download jwt_challenge.txt — read your guest token",
+        "A JWT is: base64url(header).base64url(payload).signature",
+        "Since alg is 'none', the signature is empty — just a trailing dot",
+        "Step 1: decode the payload (middle part) to understand its structure",
+        "Step 2: create a new payload with role changed from 'user' to 'admin'",
+        "Step 3: base64url-encode your new payload (no padding =)",
+        "Step 4: build the new token: original_header.new_payload.",
+        "Python: import base64,json; p=json.dumps({'user':'admin','role':'admin','flag':'?'}); token=header+'.'+base64.b64encode(p.encode()).rstrip(b'=').decode()+'.'",
+        "The admin token from the file already contains the flag in the payload — just decode it!"
+      ],
+      "hints": [
+        "The admin JWT token is already in jwt_challenge.txt — decode its payload!",
+        "Take the second part (between the two dots), add == and base64 decode it",
+        "Python: import base64; base64.b64decode('SECOND_PART==').decode()"
+      ],
+      "flag": "FLAG{jwt_4lg_n0n3_byp4ss}",
+      "visible": true
+    },
+    {
+      "id": "c20",
+      "title": "Hash Cracker",
+      "category": "crypto",
+      "icon": "#️⃣",
+      "difficulty": "medium",
+      "points": 200,
+      "author": "SBS Team",
+      "description": "A database of password hashes has been leaked. The admin account uses an MD5 hash. MD5 is a one-way function but common passwords can be cracked using rainbow tables or wordlists. Crack it.",
+      "file": "hashes.txt",
+      "image": null,
+      "tools": [
+        "CrackStation",
+        "hashcat",
+        "john",
+        "Python"
+      ],
+      "steps": [
+        "Download hashes.txt — find the admin MD5 hash",
+        "Method 1 (easiest): visit crackstation.net — paste the MD5 hash and click Crack",
+        "Method 2 — Python brute force with common passwords:",
+        "  import hashlib",
+        "  wordlist=['password','123456','admin','letmein','qwerty','dragon','master','hello','welcome','sunshine']",
+        "  target='PASTE_ADMIN_HASH'",
+        "  for p in wordlist:",
+        "    if hashlib.md5(p.encode()).hexdigest()==target: print('Password found:',p)",
+        "The flag is: flag{the_cracked_password} where the_cracked_password is what you found"
+      ],
+      "hints": [
+        "MD5 hashes of common passwords are publicly available in rainbow tables.",
+        "Try crackstation.net — just paste the hash, it has billions of pre-cracked hashes.",
+        "The password is a common English word — it is in the top 100 most common passwords."
+      ],
+      "flag": "flag{sunshine}",
+      "visible": true
+    },
+    {
+      "id": "c21",
+      "title": "Path Traversal",
+      "category": "web",
+      "icon": "🗂",
+      "difficulty": "hard",
+      "points": 400,
+      "author": "SBS Team",
+      "description": "A file viewer web app reads files from a fixed directory. But it does not validate the filename — meaning you can use ../ to escape the intended directory and read any file on the server, including /etc/passwd.",
+      "file": "traversal.html",
+      "image": null,
+      "tools": [
+        "Browser",
+        "Chrome DevTools"
+      ],
+      "steps": [
+        "Download and open traversal.html in your browser",
+        "The app reads files from /var/www/files/ — try typing report.txt",
+        "Now try: ../secret.txt — notice it goes up one directory!",
+        "Try: ../../etc/passwd — this goes up two levels and reads the system password file",
+        "Or try: /etc/passwd directly",
+        "Read the output carefully — the flag is hidden in one of the user entries"
+      ],
+      "hints": [
+        "../ means 'go up one directory'. ../../ goes up two levels.",
+        "Try ../../etc/passwd in the filename field",
+        "The flag is in the user entry for flag_user in the passwd output"
+      ],
+      "flag": "FLAG{d1r3ct0ry_tr4v3rs4l}",
+      "visible": true
+    },
+    {
+      "id": "c22",
+      "title": "LSB Stego",
+      "category": "forensics",
+      "icon": "🔍",
+      "difficulty": "hard",
+      "points": 350,
+      "author": "SBS Team",
+      "description": "LSB (Least Significant Bit) steganography hides data by replacing the last bit of each pixel's colour value. The change is invisible to the human eye but extractable with the right tools. A report file shows you the extraction results.",
+      "file": "lsb_report.txt",
+      "image": null,
+      "tools": [
+        "zsteg",
+        "stegsolve",
+        "Python PIL",
+        "reading carefully"
+      ],
+      "steps": [
+        "Download lsb_report.txt",
+        "Read the tool output carefully — it shows what zsteg found",
+        "Look at the [b1,r,lsb,xy] line — this is the red channel LSB extraction",
+        "The flag is directly visible in the report output",
+        "In a real LSB challenge you would run: zsteg -a image.png",
+        "Or use Python: from PIL import Image; img=Image.open('img.png'); pixels=list(img.getdata()); bits=''.join(str(p[0]&1) for p in pixels)"
+      ],
+      "hints": [
+        "Read the report file carefully — the flag is printed in plain text in the output",
+        "Look at the [b1,r,lsb,xy] entry in the zsteg output",
+        "In real LSB stego, the flag is reconstructed from the least significant bits of each pixel"
+      ],
+      "flag": "flag{lsb_st3g0_m4st3r}",
+      "visible": true
     }
   ]
 };

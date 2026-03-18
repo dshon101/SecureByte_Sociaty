@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Secure Company Portal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: #111827;
+      padding: 30px;
+      border-radius: 12px;
+      width: 340px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      border-radius: 8px;
+      border: none;
+      background: #2563eb;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: #6b7280;
+      cursor: not-allowed;
+    }
+
+    .msg {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Employee Login</h2>
+  <input id="username" placeholder="Username">
+  <input id="password" type="password" placeholder="Password">
+  <button id="loginBtn" disabled>Login</button>
+  <div class="msg" id="message"></div>
+</div>
+
+<script>
+  // TODO: remove before production
+  const DEBUG_MODE = true;
+
+  // Hidden flag (should never be exposed 👀)
+  const FLAG = "FLAG{cl13nt_s1d3_1s_n3v3r_s3cur3}";
+
+  const user = document.getElementById("username");
+  const pass = document.getElementById("password");
+  const btn = document.getElementById("loginBtn");
+  const msg = document.getElementById("message");
+
+  function validate() {
+    if (user.value.length > 0 && pass.value.length > 0) {
+      btn.disabled = false;
+    } else {
+      btn.disabled = true;
+    }
+  }
+
+  user.addEventListener("input", validate);
+  pass.addEventListener("input", validate);
+
+  btn.addEventListener("click", () => {
+    if (user.value === "admin" && pass.value === "supersecure123") {
+      msg.innerText = "Welcome Admin!";
+    } else {
+      msg.innerText = "Access Denied!";
+    }
+
+    // Debug leak (developer forgot to remove)
+    if (DEBUG_MODE) {
+      console.log("Debug Info:", FLAG);
+    }
+  });
+</script>
+
+</body>
+</html>
+</html>

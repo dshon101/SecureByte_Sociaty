@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Secure Admin Portal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: #111827;
+      padding: 30px;
+      border-radius: 12px;
+      width: 350px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    h2 { text-align: center; }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 12px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    button {
+      background: #22c55e;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .msg {
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Admin Login</h2>
+  <input id="username" placeholder="Username">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <div class="msg" id="msg"></div>
+</div>
+
+<script>
+  // Encoded credentials (not secure 👀)
+  const encodedUser = "YWRtaW4=";         // base64
+  const encodedPass = "cGFzc3dvcmQxMjM="; // base64
+
+  function decode(str) {
+    return atob(str);
+  }
+
+  function login() {
+    const user = document.getElementById("username").value;
+    const pass = document.getElementById("password").value;
+
+    const realUser = decode(encodedUser);
+    const realPass = decode(encodedPass);
+
+    if (user === realUser && pass === realPass) {
+      document.getElementById("msg").innerText =
+        "✅ Access Granted! FLAG{l0g1n_cr4ck3d}";
+    } else {
+      document.getElementById("msg").innerText =
+        "❌ Invalid credentials";
+    }
+  }
+</script>
+
+</body>
+</html>

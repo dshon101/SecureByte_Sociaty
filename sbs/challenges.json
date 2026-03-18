@@ -1,0 +1,171 @@
+{
+  "competition": {
+    "name": "SecureByte Society",
+    "short": "SBS",
+    "tagline": "Capture The Flag Competition",
+    "edition": "2025 Edition",
+    "instructor_key": "sbs_admin_2025",
+    "welcome_message": "Welcome to SecureByte Society CTF — find the flags, sharpen your skills, and climb the leaderboard."
+  },
+  "challenges": [
+    {
+      "id": "c1",
+      "title": "Decode the Message",
+      "category": "crypto",
+      "icon": "🔐",
+      "difficulty": "easy",
+      "points": 100,
+      "author": "SBS Team",
+      "description": "A mysterious file has been found with scrambled text. It looks like someone tried to hide data using a common encoding scheme. Decode it layer by layer to reveal the flag.",
+      "file": "challenge1.txt",
+      "image": null,
+      "tools": ["base64", "CyberChef", "Python"],
+      "steps": [
+        "Open challenge1.txt — notice the base64-looking text",
+        "Run:  base64 -d challenge1.txt",
+        "The output is still base64! Decode it a second time.",
+        "Or use CyberChef → From Base64 (apply twice)",
+        "Python:  import base64; print(base64.b64decode(base64.b64decode(open('challenge1.txt').read())))"
+      ],
+      "hints": [
+        "The = signs at the end are Base64 padding — it has been encoded more than once.",
+        "Try decoding twice:  base64 -d challenge1.txt | base64 -d",
+        "The flag format is: flag{...}"
+      ],
+      "flag": "flag{base64_is_fun}",
+      "visible": true
+    },
+    {
+      "id": "c2",
+      "title": "Fake Image",
+      "category": "forensics",
+      "icon": "🖼",
+      "difficulty": "easy",
+      "points": 150,
+      "author": "SBS Team",
+      "description": "Someone sent a file called image.jpg — but something is very wrong. The file is lying about what it really is. Find out what is hiding inside.",
+      "file": "image.jpg",
+      "image": null,
+      "tools": ["file", "binwalk", "unzip"],
+      "steps": [
+        "Run:  file image.jpg — notice it says 'Zip archive data', not JPEG!",
+        "Run:  binwalk image.jpg — spot the embedded ZIP signature",
+        "Rename:  mv image.jpg image.zip",
+        "Extract:  unzip image.zip — read flag.txt inside"
+      ],
+      "hints": [
+        "A file extension is just a label — the real type is stored in the first bytes (magic bytes).",
+        "binwalk scans for known file headers. Look for a ZIP offset at position 0x00.",
+        "ZIP magic bytes are: PK.. (50 4B 03 04)"
+      ],
+      "flag": "flag{hidden_in_zip}",
+      "visible": true
+    },
+    {
+      "id": "c3",
+      "title": "Metadata Hunt",
+      "category": "forensics",
+      "icon": "📷",
+      "difficulty": "medium",
+      "points": 200,
+      "author": "SBS Team",
+      "description": "A photo was shared online. The person thought they were anonymous — but photos carry invisible metadata that can expose secrets. Hunt down the hidden flag.",
+      "file": "photo.jpg",
+      "image": null,
+      "tools": ["exiftool", "strings", "hex editor"],
+      "steps": [
+        "Run:  exiftool photo.jpg — read all metadata fields carefully",
+        "Look for the Author and Flag fields in the output",
+        "Or:  strings photo.jpg | grep flag",
+        "Or:  cat photo.jpg — this file is plain text disguised as a JPG!"
+      ],
+      "hints": [
+        "EXIF metadata is embedded in image files and can store camera model, GPS, author, comments...",
+        "Try:  strings photo.jpg",
+        "This file is actually plain text — try opening it in a text editor directly!"
+      ],
+      "flag": "flag{metadata_leak}",
+      "visible": true
+    },
+    {
+      "id": "c4",
+      "title": "Hidden Strings",
+      "category": "binary",
+      "icon": "💾",
+      "difficulty": "medium",
+      "points": 200,
+      "author": "SBS Team",
+      "description": "A mysterious binary file was found on a compromised server. Somewhere inside its bytes is a hidden message. Use the right tools to extract it.",
+      "file": "mystery.bin",
+      "image": null,
+      "tools": ["strings", "xxd", "hexdump"],
+      "steps": [
+        "Run:  strings mystery.bin — extract all printable text sequences",
+        "Run:  strings mystery.bin | grep flag — filter for the flag",
+        "Or:  xxd mystery.bin | less — look through the hex dump",
+        "Or:  cat mystery.bin | tr -cd '[:print:]' | grep -o 'flag{[^}]*}'"
+      ],
+      "hints": [
+        "The 'strings' command extracts sequences of 4+ printable ASCII characters from any file.",
+        "Try:  strings -n 4 mystery.bin | grep flag",
+        "The flag is embedded directly in the binary between non-printable bytes."
+      ],
+      "flag": "flag{strings_found}",
+      "visible": true
+    },
+    {
+      "id": "c5",
+      "title": "Client-Side Secrets",
+      "category": "web",
+      "icon": "🌐",
+      "difficulty": "easy",
+      "points": 100,
+      "author": "SBS Team",
+      "description": "Open zzz.html in your browser. The developer made a classic mistake — they stored a secret inside the JavaScript code. Find it using your browser's DevTools.",
+      "file": "zzz.html",
+      "image": null,
+      "tools": ["Chrome DevTools", "Firefox DevTools"],
+      "steps": [
+        "Download and open zzz.html in your browser",
+        "Press Ctrl+Shift+I (or Cmd+Opt+I on Mac) to open DevTools",
+        "Go to the Sources tab and open zzz.html",
+        "Search for 'FLAG{' using Ctrl+F inside the source viewer",
+        "OR: Go to the Console tab, enter any login, click Login — watch for debug output"
+      ],
+      "hints": [
+        "Look for a variable named FLAG or const FLAG in the <script> section.",
+        "The developer left DEBUG_MODE = true — secrets get logged to the browser console.",
+        "Open Console tab, type anything in the login form, click Login. Read what appears."
+      ],
+      "flag": "FLAG{cl13nt_s1d3_1s_n3v3r_s3cur3}",
+      "visible": true
+    },
+    {
+      "id": "c6",
+      "title": "Encoded Login",
+      "category": "web",
+      "icon": "🔑",
+      "difficulty": "medium",
+      "points": 250,
+      "author": "SBS Team",
+      "description": "Open zzzzchallenge.html — there is an admin login page. The credentials are hidden using Base64 encoding. Decode them, log in, and capture the flag.",
+      "file": "zzzzchallenge.html",
+      "image": null,
+      "tools": ["Chrome DevTools", "atob()", "CyberChef"],
+      "steps": [
+        "Download and open zzzzchallenge.html in your browser",
+        "Open DevTools → Sources — find const encodedUser and const encodedPass",
+        "Open the Console tab and run:  atob('YWRtaW4=')",
+        "Run:  atob('cGFzc3dvcmQxMjM=')  to get the password",
+        "Log in with the decoded credentials to reveal the flag"
+      ],
+      "hints": [
+        "atob() is a browser built-in function that decodes Base64 strings.",
+        "Open the Console tab and type:  atob('YWRtaW4=')  then press Enter.",
+        "Username: admin  |  Password: password123 — now log in to get the flag!"
+      ],
+      "flag": "FLAG{l0g1n_cr4ck3d}",
+      "visible": true
+    }
+  ]
+}

@@ -4,36 +4,32 @@
    ══════════════════════════════════════════════════════ */
 
 const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyAhIsm2cf4BQe3KWAqk_Uuu6aGJj6XIN_k",
-  authDomain: "sbs-ctf.firebaseapp.com",
-  databaseURL: "https://sbs-ctf-default-rtdb.firebaseio.com",
-  projectId: "sbs-ctf",
-  storageBucket: "sbs-ctf.firebasestorage.app",
+  apiKey:            "AIzaSyAhIsm2cf4BQe3KWAqk_Uuu6aGJj6XIN_k",
+  authDomain:        "sbs-ctf.firebaseapp.com",
+  databaseURL:       "https://sbs-ctf-default-rtdb.firebaseio.com",
+  projectId:         "sbs-ctf",
+  storageBucket:     "sbs-ctf.firebasestorage.app",
   messagingSenderId: "612078269881",
-  appId: "1:612078269881:web:4a6aab33ab811f4bc7b268",
-  measurementId: "G-QB0DTFB08G"
+  appId:             "1:612078269881:web:4a6aab33ab811f4bc7b268",
+  measurementId:     "G-QB0DTFB08G"
 };
 
 /* ── FIREBASE SDK (loaded from CDN) ─────────────────── */
-// These are loaded via <script> tags in index.html before this file.
-// firebase-app-compat + firebase-database-compat
+// Ensure these <script> tags are in index.html BEFORE this file:
+//   <script src="https://www.gstatic.com/firebasejs/10.x.x/firebase-app-compat.js"></script>
+//   <script src="https://www.gstatic.com/firebasejs/10.x.x/firebase-database-compat.js"></script>
+//   <script src="https://www.gstatic.com/firebasejs/10.x.x/firebase-auth-compat.js"></script>
 
-let DB = null;   // Firebase database reference, set in DB_INIT()
+let DB = null;
+let AUTH = null;
 let FB_READY = false;
 let FB_FAILED = false;
 
 function DB_INIT() {
-  // Check if placeholder values haven't been replaced yet
-  if (FIREBASE_CONFIG.apiKey === 'PASTE_YOUR_apiKey_HERE') {
-    console.warn('[SBS] Firebase not configured — running in offline mode (localStorage only).');
-    FB_FAILED = true;
-    return;
-  }
   try {
-    if (!firebase.apps.length) {
-      firebase.initializeApp(FIREBASE_CONFIG);
-    }
-    DB = firebase.database();
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    DB   = firebase.database();
+    AUTH = firebase.auth();
     FB_READY = true;
     console.log('[SBS] Firebase connected ✅');
   } catch (e) {
@@ -42,41 +38,28 @@ function DB_INIT() {
   }
 }
 
+/* ── Converts username → internal email for Firebase Auth ── */
+// Users only ever see their username — this is used internally only.
+function toEmail(username) {
+  return `${username.toLowerCase()}@sbs-ctf.local`;
+}
+
 /* ── DATABASE PATHS ─────────────────────────────────── */
-// All data lives under: /sbs/{competition_id}/
-// This lets you run multiple competitions on one Firebase project.
 const COMP_ID = () => (typeof CONFIG !== 'undefined' && CONFIG.id) ? CONFIG.id : 'default';
 const PATH = {
-  users: () => `sbs/${COMP_ID()}/users`,
-  user: (u) => `sbs/${COMP_ID()}/users/${u}`,
-  session: (u) => `sbs/${COMP_ID()}/sessions/${u}`,
+  users:    () => `sbs/${COMP_ID()}/users`,
+  user:     (u) => `sbs/${COMP_ID()}/users/${u}`,
+  session:  (u) => `sbs/${COMP_ID()}/sessions/${u}`,
   sessions: () => `sbs/${COMP_ID()}/sessions`,
-  custom: () => `sbs/${COMP_ID()}/custom_challenges`,
+  custom:   () => `sbs/${COMP_ID()}/custom_challenges`,
 };
 
 /* ── DB HELPERS ─────────────────────────────────────── */
-function dbRef(path) {
-  return DB.ref(path);
-}
-
-async function dbGet(path) {
-  const snap = await dbRef(path).once('value');
-  return snap.val();
-}
-
-async function dbSet(path, value) {
-  await dbRef(path).set(value);
-}
-
-async function dbUpdate(path, value) {
-  await dbRef(path).update(value);
-}
-
-function dbListen(path, callback) {
-  dbRef(path).on('value', snap => callback(snap.val()));
-  // returns unsubscribe function
-  return () => dbRef(path).off('value');
-}
+function dbRef(path)               { return DB.ref(path); }
+async function dbGet(path)         { const s = await dbRef(path).once('value'); return s.val(); }
+async function dbSet(path, val)    { await dbRef(path).set(val); }
+async function dbUpdate(path, val) { await dbRef(path).update(val); }
+function dbListen(path, cb)        { dbRef(path).on('value', s => cb(s.val())); return () => dbRef(path).off('value'); }
 
 /* ══════════════════════════════════════════════════════
    HIGH-LEVEL API  (used by app.js)
@@ -84,7 +67,42 @@ function dbListen(path, callback) {
 
 const SBS_DB = {
 
-  /* ── USERS ────────────────────────────────────────── */
+  /* ── AUTH ─────────────────────────────────────────── */
+
+  async register(username, password, role) {
+    if (!FB_READY) {
+      // Offline fallback — no password stored
+      const local = JSON.parse(localStorage.getItem('sbs_users') || '{}');
+      if (local[username]) throw new Error('Username already taken.');
+      local[username] = { role, registeredAt: new Date().toISOString() };
+      localStorage.setItem('sbs_users', JSON.stringify(local));
+      return;
+    }
+    // Create Firebase Auth account (password is hashed by Firebase — never stored by us)
+    const cred = await AUTH.createUserWithEmailAndPassword(toEmail(username), password);
+    // Save profile to DB — NO password field
+    await dbSet(PATH.user(username), {
+      uid:          cred.user.uid,
+      role,
+      registeredAt: new Date().toISOString()
+    });
+  },
+
+  async login(username, password) {
+    if (!FB_READY) {
+      // Offline: just check username exists (no password verification possible without hashing)
+      const local = JSON.parse(localStorage.getItem('sbs_users') || '{}');
+      if (!local[username]) throw new Error('Invalid credentials.');
+      return;
+    }
+    await AUTH.signInWithEmailAndPassword(toEmail(username), password);
+  },
+
+  async logout() {
+    if (FB_READY) await AUTH.signOut();
+  },
+
+  /* ── USERS ─────────────────────────────────────────── */
 
   async getUser(username) {
     if (!FB_READY) return JSON.parse(localStorage.getItem('sbs_users') || '{}')[username] || null;
@@ -92,22 +110,18 @@ const SBS_DB = {
   },
 
   async saveUser(username, data) {
-    // Always save to localStorage as backup
+    // Strip any password field before saving — passwords live in Firebase Auth only
+    const { pass, password, ...safeData } = data;
     const local = JSON.parse(localStorage.getItem('sbs_users') || '{}');
-    local[username] = data;
+    local[username] = safeData;
     localStorage.setItem('sbs_users', JSON.stringify(local));
-
     if (!FB_READY) return;
-    await dbSet(PATH.user(username), data);
+    await dbSet(PATH.user(username), safeData);
   },
 
   async userExists(username) {
-    if (!FB_READY) {
-      const local = JSON.parse(localStorage.getItem('sbs_users') || '{}');
-      return !!local[username];
-    }
-    const u = await dbGet(PATH.user(username));
-    return u !== null;
+    if (!FB_READY) return !!JSON.parse(localStorage.getItem('sbs_users') || '{}')[username];
+    return (await dbGet(PATH.user(username))) !== null;
   },
 
   async getAllUsers() {
@@ -122,16 +136,13 @@ const SBS_DB = {
       const all = JSON.parse(localStorage.getItem('sbs_sessions') || '{}');
       return all[username] || { solved: [], hintsUsed: {}, score: 0, submissions: [] };
     }
-    const s = await dbGet(PATH.session(username));
-    return s || { solved: [], hintsUsed: {}, score: 0, submissions: [] };
+    return (await dbGet(PATH.session(username))) || { solved: [], hintsUsed: {}, score: 0, submissions: [] };
   },
 
   async saveSession(username, sessionData) {
-    // Always mirror to localStorage
     const local = JSON.parse(localStorage.getItem('sbs_sessions') || '{}');
     local[username] = sessionData;
     localStorage.setItem('sbs_sessions', JSON.stringify(local));
-
     if (!FB_READY) return;
     await dbSet(PATH.session(username), sessionData);
   },
@@ -143,7 +154,7 @@ const SBS_DB = {
 
   /* ── REAL-TIME LEADERBOARD LISTENER ──────────────── */
   listenLeaderboard(callback) {
-    if (!FB_READY) return () => { };   // no-op unsubscribe
+    if (!FB_READY) return () => {};
     return dbListen(PATH.sessions(), callback);
   },
 
@@ -153,12 +164,10 @@ const SBS_DB = {
       challengeId,
       flag,
       correct,
-      timestamp: Date.now(),
+      timestamp:    Date.now(),
       timestampISO: new Date().toISOString()
     };
-
     if (!FB_READY) {
-      // Store in localStorage
       const local = JSON.parse(localStorage.getItem('sbs_sessions') || '{}');
       if (!local[username]) local[username] = { solved: [], hintsUsed: {}, score: 0, submissions: [] };
       if (!local[username].submissions) local[username].submissions = [];
@@ -166,8 +175,6 @@ const SBS_DB = {
       localStorage.setItem('sbs_sessions', JSON.stringify(local));
       return;
     }
-
-    // Push to Firebase (creates unique key per submission)
     await DB.ref(`${PATH.session(username)}/submissions`).push(submission);
   },
 
@@ -181,7 +188,6 @@ const SBS_DB = {
   async getCustomChallenges() {
     if (!FB_READY) return JSON.parse(localStorage.getItem('sbs_custom') || '[]');
     const data = await dbGet(PATH.custom());
-    // Firebase returns objects for arrays — convert back
     if (!data) return [];
     return Array.isArray(data) ? data : Object.values(data);
   },
@@ -192,12 +198,12 @@ const SBS_DB = {
 
   /* ── EXPORT ALL DATA (instructor use) ──────────────── */
   async exportAll() {
-    const users = await this.getAllUsers();
+    const users    = await this.getAllUsers();
     const sessions = await this.getAllSessions();
     return {
-      exportedAt: new Date().toISOString(),
+      exportedAt:  new Date().toISOString(),
       competition: COMP_ID(),
-      users: Object.entries(users).filter(([, u]) => u.role === 'student').map(([name]) => name),
+      users:       Object.entries(users).filter(([, u]) => u.role === 'student').map(([name]) => name),
       sessions
     };
   }
